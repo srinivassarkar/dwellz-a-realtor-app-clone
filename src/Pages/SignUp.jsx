@@ -9,7 +9,6 @@ import { db } from "../firebase";
 import { Link } from "react-router-dom";
 import OAuth from "../Components/OAuth";
 import { serverTimestamp, doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function SignUp() {
@@ -21,7 +20,6 @@ export default function SignUp() {
   });
 
   const { name, email, password } = formData;
-  const navigate = useNavigate();
 
   function onChange(e) {
     setFormData((prevState) => ({
@@ -54,9 +52,7 @@ export default function SignUp() {
 
       // toast.success("Sign up was successful");
       // navigate("/");
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       toast.error("Something went wrong with the registration");
     }
   }
@@ -65,7 +61,7 @@ export default function SignUp() {
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign Up</h1>
 
-      <div className="flex justify-center flex-wrap items-center px-6 py-12">
+      <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 max-w-6xl mx-auto">
           <img
             src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a2V5fGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60"

@@ -9,9 +9,11 @@ export default function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
   const [changeDetails, setChangeDetails] = useState(false);
+
+  //console.log(auth.currentUser)
   const [formData, setFormData] = useState({
-    name: "Srinivas Sarkar",
-    email: "srinivassarkar07@gmail.com",
+    name: auth.currentUser.displayName, // Check if user is authenticated
+    email: auth.currentUser.email,
   });
 
   const { name, email } = formData;

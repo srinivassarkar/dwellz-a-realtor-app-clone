@@ -2,13 +2,12 @@ import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../Components/OAuth";
-import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-
 export default function SignIn() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -23,30 +22,28 @@ export default function SignIn() {
     }));
   }
 
-  async function onSubmit(e){
-    e.preventDefault()
-    try{
-      const auth = getAuth()
-      const userCredential = await signInWithEmailAndPassword(auth,email,password)
-      if (userCredential.user){
-        navigate("/")
+  async function onSubmit(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      if (userCredential.user) {
+        navigate("/");
       }
-
+    } catch (error) {
+      toast.error("Please Register before signing in ");
     }
-    catch (error){
-      toast.error("Bad user credentials")
-
-    }
-
   }
-
-
 
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign In</h1>
 
-      <div className="flex justify-center flex-wrap items-center px-6 py-12">
+      <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 max-w-6xl mx-auto">
           <img
             src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a2V5fGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60"
