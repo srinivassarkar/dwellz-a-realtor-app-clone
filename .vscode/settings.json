@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "firestore"
+    ],
+    "cSpell.ignoreWords": [
+        "uuidv"
     ]
 }
