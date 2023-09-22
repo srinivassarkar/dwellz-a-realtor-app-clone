@@ -34,10 +34,11 @@ export default function Header() {
           <img
             src="./ogLogo.png"
             alt="logo"
-            className="h-9 cursor-pointer"
+            className="h-9 w-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl cursor-pointer"
             onClick={() => navigate("/")}
           />
         </div>
+
         <div>
           <ul className="flex space-x-10">
             <li

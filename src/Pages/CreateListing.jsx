@@ -91,8 +91,8 @@ export default function CreateListing() {
       return;
     }
 
-    let geolocation = {}; // Corrected variable name
-    let location; // Corrected variable name
+    let geolocation = {};
+    let location;
     if (geolocationEnabled) {
       const response = await fetch(
         `https://api.geoapify.com/v1/geocode/search?text=${address}=json&apiKey=${process.env.REACT_APP_GEOCODE_API_KEY}`
@@ -104,6 +104,10 @@ export default function CreateListing() {
       geolocation.lng = data?.features?.[0]?.geometry?.coordinates?.[0]; // longitude
 
       location = (data.features.length === 0) === "ZERO_RESULTS" && "undefined";
+      // const location =
+      //   data.type === "FeatureCollection" && data.features.length === 0
+      //     ? undefined
+      //     : data;
 
       if (location === undefined) {
         setloading(false);
@@ -163,6 +167,7 @@ export default function CreateListing() {
       imgUrls,
       geolocation,
       timestamp: serverTimestamp(),
+      userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
     !formData.offer && delete formDataCopy.discountedPrice;
