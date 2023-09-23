@@ -139,7 +139,6 @@ export default function Profile() {
             type="submit"
             className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800"
           >
-            
             <Link
               to="/create-listing"
               className="flex justify-center items-center"
@@ -153,8 +152,10 @@ export default function Profile() {
       <div className="max-w-6xl px-3 mt-6 mx-auto">
         {!loading && listings.length > 0 && (
           <>
-            <h2 className="text-2xl text-center font-semibold">My listings</h2>
-            <ul>
+            <h2 className="text-2xl text-center font-semibold mb-6 ">
+              My listings
+            </h2>
+            <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 mt-6 mb-6">
               {listings.map((listing) => (
                 <ListingItem
                   key={listing.id}
