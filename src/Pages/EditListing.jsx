@@ -252,6 +252,8 @@ export default function EditListing() {
             rent
           </button>
         </div>
+        <div>
+    </div>
         <p className="text-lg mt-6 font-semibold ">Name</p>
         <input
           type="text"

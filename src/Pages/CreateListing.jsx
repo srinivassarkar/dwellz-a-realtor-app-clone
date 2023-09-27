@@ -11,14 +11,13 @@ import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function CreateListing() {
   const navigate = useNavigate();
   const auth = getAuth();
   const [geolocationEnabled, setgeolocationEnabled] = useState(true);
-  const [loading, setloading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "rent",
     name: "",
@@ -78,15 +77,15 @@ export default function CreateListing() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    setloading(true);
+    setLoading(true);
 
     if (+discountedPrice >= +regularPrice) {
-      setloading(false);
+      setLoading(false);
       toast.error("Discounted price needs to be less than regular price");
       return;
     }
     if (images.length > 6) {
-      setloading(false);
+      setLoading(false);
       toast.error("maximum 6 images are allowed");
       return;
     }
@@ -104,13 +103,10 @@ export default function CreateListing() {
       geolocation.lng = data?.features?.[0]?.geometry?.coordinates?.[0]; // longitude
 
       location = (data.features.length === 0) === "ZERO_RESULTS" && "undefined";
-      // const location =
-      //   data.type === "FeatureCollection" && data.features.length === 0
-      //     ? undefined
-      //     : data;
+
 
       if (location === undefined) {
-        setloading(false);
+        setLoading(false);
         toast.error("Please enter a correct address");
         return;
       }
@@ -157,7 +153,7 @@ export default function CreateListing() {
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImage(image))
     ).catch((error) => {
-      setloading(false);
+      setLoading(false);
       toast.error("Images not uploaded");
       return;
     });
@@ -170,15 +166,14 @@ export default function CreateListing() {
       userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
-    !formData.offer && delete formDataCopy.discountedPrice;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
     delete formDataCopy.latitude;
     delete formDataCopy.longitude;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
-    setloading(false);
-    toast.success("Listing Created");
-    navigate(`./category/${formDataCopy.type}/${docRef.id}`);
+    setLoading(false);
+    toast.success("Listing created");
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   }
-
   if (loading) {
     return <Spinner />;
   }
@@ -433,13 +428,13 @@ export default function CreateListing() {
           <p className="text-lg font-semibold ">Images</p>
           <p className="text-gray-600">The first image will be cover (max 6)</p>
           <input
-            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white  focus:border-slate-600          "
             type="file"
             id="images"
             onChange={onChange}
             accept=".jpg,.png,.jpeg"
             multiple
             required
+            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white  focus:border-slate-600"
           />
         </div>
         <button
