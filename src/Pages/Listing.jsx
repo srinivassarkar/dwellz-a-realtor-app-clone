@@ -10,11 +10,13 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { RxShare2 } from "react-icons/rx";
 
 export default function Listing() {
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [shareLinkCopied, setShareLinkCopied] = useState(false);
 
   const modules = [Autoplay, Navigation, Pagination, EffectFade];
 
@@ -56,6 +58,23 @@ export default function Listing() {
           </SwiperSlide>
         ))}
       </Swiper>
+      <div
+        className="fixed top-[8.5%] right-[3%] z-10 bg-white cursor-pointer border-2 border-gray-400 rounded-full w-10 h-10 flex justify-center items-center"
+        onClick={() => {
+          navigator.clipboard.writeText(window.location.href);
+          setShareLinkCopied(true);
+          setTimeout(() => {
+            setShareLinkCopied(false);
+          }, 1000);
+        }}
+      >
+        <RxShare2 className="text-lg text-slate-700" />
+      </div>
+      {shareLinkCopied && (
+        <p className="fixed top-[10%] right-[6%] z-10 font-semibold border-2 border-gray-400 rounded-md bg-white p-2">
+          Link Copied
+        </p>
+      )}
     </main>
   );
 }
