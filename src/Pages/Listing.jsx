@@ -18,12 +18,16 @@ import {
   FaParking,
   FaChair,
 } from "react-icons/fa";
+import { getAuth } from "firebase/auth";
+import Contact from "../Components/Contact";
 
 export default function Listing() {
+  const auth = getAuth();
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const [contactLandlord, setContactLandlord] = useState(false);
 
   const modules = [Autoplay, Navigation, Pagination, EffectFade];
 
@@ -79,15 +83,15 @@ export default function Listing() {
       </div>
       {shareLinkCopied && (
         <p
-          className="fixed top-[12%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 font-semibold border-2 border-gray-400 rounded-md bg-white p-2"
+          className="fixed top-[13%] right-[4%] transform -translate-x-1/2 -translate-y-1/2 z-10 font-semibold border-2 border-gray-400 rounded-3xl bg-white  p-2"
           style={{ fontSize: "12px" }}
         >
-          Link Copied
+          Link Copied!
         </p>
       )}
 
       <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg  shadow-lg bg-white lg:space-x-5 ">
-        <div className="w-full h-[200px] lg-[400px] ">
+        <div className="w-full ">
           <p className="text-2xl font-bold mb-3 text-blue-900">
             {listing.name} - $
             {listing.offer
@@ -117,7 +121,7 @@ export default function Listing() {
             <span className="font-semibold">Description - </span>
             {listing.description}
           </p>
-          <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold">
+          <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold mb-6">
             <li className="flex items-center whitespace-nowrap">
               <FaBed className="text-lg mr-1" />
               {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
@@ -134,12 +138,24 @@ export default function Listing() {
             </li>
             <li className="flex items-center whitespace-nowrap">
               <FaChair className="text-lg mr-1" />
-              {+listing.furnished  ? "Furnished " : "Not Furnished "}
+              {+listing.furnished ? "Furnished " : "Not Furnished "}
             </li>
           </ul>
+          {listing.userRef !== auth.currentUser?.uid && !contactLandlord && (
+            <div className="mt-6 ">
+              <button
+                onClick={() => setContactLandlord(true)}
+                className="w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800"
+              >
+                Contact Landlord
+              </button>
+            </div>
+          )}
+
+          {contactLandlord && <Contact userRef={listing.userRef} listing={listing} />}
         </div>
 
-        <div className="bg-blue-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden "></div>
+        <div className="bg-blue-300 w-full h-[400px] lg-[400px] z-10 overflow-x-hidden "></div>
       </div>
     </main>
   );
