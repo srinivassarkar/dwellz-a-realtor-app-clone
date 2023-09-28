@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import logo from "../assets/ogLogo.png"
 
 export default function Header() {
   const [pageState, setPageState] = useState("Sign in");
@@ -32,7 +33,7 @@ export default function Header() {
       <header className="flex justify-between items-center px-3 max-w-6xl mx-auto">
         <div>
           <img
-            src="./ogLogo.png"
+            src={logo}
             alt="logo"
             className="h-7 w-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl cursor-pointer"
             onClick={() => navigate("/")}

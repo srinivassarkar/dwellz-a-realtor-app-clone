@@ -20,6 +20,7 @@ import {
 } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import Contact from "../Components/Contact";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 export default function Listing() {
   const auth = getAuth();
@@ -121,26 +122,28 @@ export default function Listing() {
             <span className="font-semibold">Description - </span>
             {listing.description}
           </p>
-          <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold mb-6">
-            <li className="flex items-center whitespace-nowrap">
-              <FaBed className="text-lg mr-1" />
+
+          <ul className="flex flex-wrap items-center justify-center space-x-2 sm:space-x-10 text-sm font-semibold mb-6">
+            <li className="flex items-center whitespace-nowrap mb-2 sm:mb-0">
+              <FaBed className="text-lg sm:text-base mr-1 sm:mr-0" />
               {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
             </li>
-            <li className="flex items-center whitespace-nowrap">
-              <FaBath className="text-lg mr-1" />
+            <li className="flex items-center whitespace-nowrap mb-2 sm:mb-0">
+              <FaBath className="text-lg sm:text-base mr-1 sm:mr-0" />
               {+listing.bathrooms > 1
                 ? `${listing.bathrooms} Bathroom`
                 : "1 Bathroom"}
             </li>
-            <li className="flex items-center whitespace-nowrap">
-              <FaParking className="text-lg mr-1" />
+            <li className="flex items-center whitespace-nowrap mb-2 sm:mb-0">
+              <FaParking className="text-lg sm:text-base mr-1 sm:mr-0" />
               {listing.parking ? "Parking Spot" : "No Parking"}
             </li>
-            <li className="flex items-center whitespace-nowrap">
-              <FaChair className="text-lg mr-1" />
+            <li className="flex items-center whitespace-nowrap mb-2 sm:mb-0">
+              <FaChair className="text-lg sm:text-base mr-1 sm:mr-0" />
               {+listing.furnished ? "Furnished " : "Not Furnished "}
             </li>
           </ul>
+
           {listing.userRef !== auth.currentUser?.uid && !contactLandlord && (
             <div className="mt-6 ">
               <button
@@ -152,10 +155,31 @@ export default function Listing() {
             </div>
           )}
 
-          {contactLandlord && <Contact userRef={listing.userRef} listing={listing} />}
+          {contactLandlord && (
+            <Contact userRef={listing.userRef} listing={listing} />
+          )}
         </div>
 
-        <div className="bg-blue-300 w-full h-[400px] lg-[400px] z-10 overflow-x-hidden "></div>
+        <div className=" w-full h-[200px] md:h-[400px] z-10 overflow-x-hidden mt-6 md:mt-0 md:ml-2">
+          <MapContainer
+            center={[listing.geolocation.lat, listing.geolocation.lng]}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker
+              position={[listing.geolocation.lat, listing.geolocation.lng]}
+            >
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </MapContainer>
+        </div>
       </div>
     </main>
   );
