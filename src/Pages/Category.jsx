@@ -18,7 +18,7 @@ export default function Category() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedlisting, setLastFetchedlisting] = useState(null);
-  const params = useParams()
+  const params = useParams();
   useEffect(() => {
     async function fetchListings() {
       try {
@@ -80,7 +80,9 @@ export default function Category() {
 
   return (
     <div className="max-w-6xl mx-auto px-3">
-      <h1 className="text-3xl text-center mt-6 font-bold mb-6">{params.categoryName === "rent"? "Places for rent":"Places for sale"}</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold mb-6">
+        {params.categoryName === "rent" ? "Places for rent" : "Places for sale"}
+      </h1>
       {loading ? (
         <Spinner />
       ) : listings && listings.length > 0 ? (
@@ -108,7 +110,12 @@ export default function Category() {
           )}
         </>
       ) : (
-        <p>There are no current offers</p>
+        <p>
+          There are no current{" "}
+          {params.categoryName === "rent"
+            ? "Places for rent"
+            : "Places for sale"}
+        </p>
       )}
     </div>
   );
