@@ -91,29 +91,43 @@ export default function CreateListing() {
     }
 
     let geolocation = {};
-    let location;
+    //let location;
     if (geolocationEnabled) {
-      const response = await fetch(
-        `https://api.geoapify.com/v1/geocode/search?text=${address}=json&apiKey=${process.env.REACT_APP_GEOCODE_API_KEY}`
-      );
-      const data = await response.json();
-      console.log(data);
+      try {
+        const response = await fetch(
+          `https://api.geoapify.com/v1/geocode/search?text=${address}&apiKey=${process.env.REACT_APP_GEOCODE_API_KEY}`
+        );
 
-      geolocation.lat = data?.features?.[0]?.geometry?.coordinates?.[1]; // latitude
-      geolocation.lng = data?.features?.[0]?.geometry?.coordinates?.[0]; // longitude
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data. Status: ${response.status}`);
+        }
 
-      location = (data.features.length === 0) === "ZERO_RESULTS" && "undefined";
+        const data = await response.json();
+        console.log(data);
 
+        if (data.features && data.features.length > 0) {
+          geolocation.lat = data.features[0]?.geometry?.coordinates?.[1]; // latitude
+          geolocation.lng = data.features[0]?.geometry?.coordinates?.[0]; // longitude
+        } else {
+          throw new Error("ZERO_RESULTS"); // No results found
+        }
+      } catch (error) {
+        if (error.message === "ZERO_RESULTS") {
+          toast.error("No results found for the provided address");
+        } else {
+          toast.error(
+            "Failed to fetch location data. Please check your address and try again."
+          );
+        }
 
-      if (location === undefined) {
         setLoading(false);
-        toast.error("Please enter a correct address");
         return;
       }
     } else {
       geolocation.lat = latitude;
       geolocation.lng = longitude;
     }
+
     async function storeImage(image) {
       return new Promise((resolve, reject) => {
         const storage = getStorage();
