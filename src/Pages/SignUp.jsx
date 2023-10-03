@@ -6,18 +6,20 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { db } from "../firebase";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import OAuth from "../Components/OAuth";
 import { serverTimestamp, doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 export default function SignUp() {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const { name, email, password } = formData;
 
@@ -48,11 +50,23 @@ export default function SignUp() {
       delete formDataCopy.password;
       formDataCopy.timestamp = serverTimestamp();
 
+      // Log user information
+      //console.log("User registered:", user);
+      //console.log("User data to be saved:", formDataCopy);
+
       await setDoc(doc(db, "users", user.uid), formDataCopy);
 
-      // toast.success("Sign up was successful");
-      // navigate("/");
+      // Redirect to another page (e.g., the home page)
+      toast.success("Sign up was successful");
+      navigate("/");
+
+      // Log success message
+      //console.log("Registration successful");
+
+      // Redirect to another page (if needed)
+      // Example: navigate("/");
     } catch (error) {
+      //console.error("Error during registration:", error);
       toast.error("Something went wrong with the registration");
     }
   }
@@ -113,7 +127,7 @@ export default function SignUp() {
               <p className="mb-6 ">
                 Have an account?
                 <Link
-                  to="/sign-up"
+                  to="/sign-in"
                   className="text-red-600 hover:text-red-700 transition duration-200 ease-in-out ml-1"
                 >
                   Sign In

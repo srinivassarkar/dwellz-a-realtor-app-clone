@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import OAuth from "../Components/OAuth";
 import { toast } from "react-toastify";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail,signInWithEmailAndPassword } from "firebase/auth";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -13,15 +13,33 @@ export default function ForgotPassword() {
 
   async function onSubmit(e) {
     e.preventDefault();
-
+  
     try {
       const auth = getAuth();
-      await sendPasswordResetEmail(auth, email);
-      toast.success("Email was sent");
+      const user = await getUserByEmail(auth, email);
+  
+      if (user) {
+        await sendPasswordResetEmail(auth, email);
+        toast.success("Email was sent");
+      } else {
+        toast.error("Email address is not registered");
+      }
     } catch (error) {
       toast.error("Could not send reset password");
     }
   }
+  
+  async function getUserByEmail(auth, email) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, "dummyPassword");
+      // If the user is successfully signed in, return the user object
+      return userCredential.user;
+    } catch (error) {
+      
+      return null;
+    }
+  }
+  
 
   return (
     <section>
@@ -58,7 +76,7 @@ export default function ForgotPassword() {
               </p>
               <p>
                 <Link
-                  to="./sign-in"
+                  to="/sign-in"
                   className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out"
                 >
                   Sign in instead
