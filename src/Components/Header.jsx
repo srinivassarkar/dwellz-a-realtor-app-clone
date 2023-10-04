@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import logo from "../assets/ogLogo.png"
+import logo from "../assets/ogLogo.png";
 
 export default function Header() {
   const [pageState, setPageState] = useState("Sign in");
@@ -73,5 +73,3 @@ export default function Header() {
     </div>
   );
 }
-
-
